@@ -1,0 +1,17 @@
+{
+    "key1": {
+        "subkey1": 123
+    },
+    "key2": [
+        {
+            "subkey21": "value of subkey21-1",
+            "subkey22": "value of subkey22-1",
+            "subkey23": "value of subkey23-1"
+        },
+        {
+            "subkey21": "value of subkey21-2",
+            "subkey22": "value of subkey22-2",
+            "subkey23": "value of subkey23-2"
+        }
+    ]
+}
