@@ -1,0 +1,13 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Welcome to BootSWIPl!</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+    <p th:text="'Hello, ' + ${name} + '!'" />
+    <p th:text="'Result of prolog expression: ' + ${result}" />
+    <p th:text="'Result of swi-prolog expression: ' + ${resultSwi}" />
+    <p th:text="'Result of reading properties: ' + ${resultProps}" />
+</body>
+</html>

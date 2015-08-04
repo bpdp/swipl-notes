@@ -1,0 +1,84 @@
+buildscript {
+	ext {
+		springBootVersion = '1.2.5.RELEASE'
+	}
+	repositories {
+		mavenLocal()
+		mavenCentral()
+		maven { url "http://repo.spring.io/release" }
+
+		// only for milestone and snapshot version
+		//maven { url "http://repo.spring.io/milestone" }
+		//maven { url "http://repo.spring.io/snapshot" }
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath("io.spring.gradle:dependency-management-plugin:0.5.3.RELEASE")
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'spring-boot'
+apply plugin: 'io.spring.dependency-management' 
+
+jar {
+	baseName = 'boot-swipl'
+	version =  '1.0.0'
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+if (!JavaVersion.current().java8Compatible) {
+	throw new IllegalStateException('''A Haiku:
+									|	This needs Java 8,
+									|	You are using something else,
+									|	Refresh. Try again.'''.stripMargin())
+}
+
+run {
+	systemProperties = System.properties
+	jvmArgs = 
+		['-Dlog4j.primary.configuration=src/main/resources/logging/log4j.properties']
+}
+
+repositories {
+	// NOTE: You should declare only repositories that you need here
+	mavenLocal()
+	mavenCentral()
+	maven { url "http://repo.spring.io/release" }
+	//maven { url "http://repo.spring.io/milestone" }
+	//maven { url "http://repo.spring.io/snapshot" }
+	flatDir {
+		dirs 'lib'
+	}
+}
+
+dependencies {
+	[
+		compile("org.springframework.boot:spring-boot-starter-data-rest"),
+		compile("org.springframework.boot:spring-boot-starter-thymeleaf"),
+		compile("org.springframework.boot:spring-boot-starter-web")
+	].each { dep ->
+        compile(dep) {
+            exclude module: "spring-boot-starter-logging"
+            exclude module: "logback-classic"
+        }
+    }
+    //compile("org.springframework.boot:spring-boot-starter-log4j2")
+	compile fileTree(dir: 'lib', include: '*.jar')
+	testCompile("org.springframework.boot:spring-boot-starter-test") 
+}
+
+eclipse {
+    classpath {
+         containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
+         containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8'
+    }
+}
+
+task wrapper(type: Wrapper) {
+	gradleVersion = '2.5'
+}
